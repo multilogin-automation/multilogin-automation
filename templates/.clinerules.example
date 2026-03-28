@@ -1,0 +1,20 @@
+# Best Practices for Browser Automation Agents (Multilogin X & Playwright)
+
+## Multilogin X API (Port 35000)
+- Always use secure local API endpoints (127.0.0.1:35000).
+- Handle API authentication and error responses robustly.
+- Implement profile lifecycle management: create, start, stop, delete.
+- Use context isolation for each browser profile.
+- Log all API interactions for auditability.
+
+## Playwright Automation
+- Integrate playwright-stealth to bypass bot detection.
+- Rotate proxies and user agents for each session.
+- Use explicit waits and robust selectors.
+- Avoid hardcoded credentials; use environment variables or secure vaults.
+- Monitor browser events and handle exceptions gracefully.
+
+## General
+- Adhere to PEP8 and enterprise Python standards.
+- Document all automation flows and configuration points.
+- Ensure all scripts are idempotent and CI/CD ready.

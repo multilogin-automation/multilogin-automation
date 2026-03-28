@@ -1,0 +1,50 @@
+name: Daily System Pulse (Randomized)
+
+permissions:
+  contents: write
+
+on:
+  schedule:
+    # Sếp cứ để cố định 01:00 AM UTC (khoảng 8h sáng VN) cho cả 8 repo cũng được
+    # Vì mình sẽ dùng Random Delay bên dưới để làm lệch giờ commit.
+    - cron: '0 1 * * *' 
+  workflow_dispatch: # Cho phép bấm chạy tay để test
+
+jobs:
+  update-pulse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Randomized Pulse Update
+        run: |
+          python3 -c "
+          import datetime, re, time, random
+          
+          # 1. NGỦ NGẪU NHIÊN: Từ 1 đến 3600 giây (tối đa 1 tiếng)
+          # Giúp giờ commit trên GitHub không bao giờ trùng nhau
+          wait_time = random.randint(1, 3600)
+          print(f'Random delay: {wait_time} seconds...')
+          time.sleep(wait_time)
+          
+          # 2. ĐỌC VÀ SỬA FILE
+          with open('README.md', 'r', encoding='utf-8') as f:
+              content = f.read()
+          
+          current_date = datetime.datetime.now().strftime('%Y--%m--%d')
+          
+          # Tìm và thay thế chính xác link Badge Last_Pulse
+          new_content = re.sub(r'Last_Pulse-.*?-blue', f'Last_Pulse-{current_date}-blue', content)
+          
+          with open('README.md', 'w', encoding='utf-8') as f:
+              f.write(new_content)
+          "
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "bot@adblogin.com"
+          git config --local user.name "multilogin-automation-bot"
+          git add README.md
+          git commit -m "chore: daily system pulse update $(date +'%Y-%m-%d') [skip ci]" || echo "No changes to commit"
+          git push

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.env
+.venv
+ENV/
+venv/
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# VSCode
+.vscode/
+
+# Mac
+.DS_Store
